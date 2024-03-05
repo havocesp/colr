@@ -328,8 +328,7 @@ hex2term_map = {term2hex_map[k]: k for k in sorted(term2hex_map)}
 
 def fix_hex(hexval: str) -> str:
     hexval = hexval.strip().lstrip('#').lower()
-    hexlen = len(hexval)
-    if hexlen == 3:
+    if (hexlen := len(hexval)) == 3:
         rgbvals = {'r': hexval[0], 'g': hexval[1], 'b': hexval[2], }
         hexval = '{r}{r}{g}{g}{b}{b}'.format(**rgbvals)
     elif hexlen != 6:

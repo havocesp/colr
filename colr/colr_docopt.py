@@ -62,8 +62,7 @@ def _coloredhelp(s):
     bigindent = (' ' * 16)
     in_opts = False
     for line in s.split('\n'):
-        linestripped = line.strip('\n').strip().strip(':')
-        if linestripped == 'Usage':
+        if (linestripped := line.strip('\n').strip().strip(':')) == 'Usage':
             # label
             line = line.replace('Usage', str(C('Usage', **ARGS_LABEL)))
         elif linestripped == 'Options':

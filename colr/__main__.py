@@ -162,9 +162,8 @@ def main(argd=None):
         }
     )
 
-    DEBUG = argd['--debug']
     # Load real debug function if available.
-    if DEBUG:
+    if DEBUG := argd['--debug']:
         load_debug_deps()
     else:
         debug = noop
@@ -205,8 +204,7 @@ def main(argd=None):
     clr = get_colr(txt, argd)
 
     # Center, ljust, rjust, or not.
-    clr = justify(clr, argd)
-    if clr:
+    if clr := justify(clr, argd):
         print(str(clr), file=fd, end=end)
         return 0
     # Error while building Colr.
@@ -392,8 +390,7 @@ def print_err(*args, **kwargs):
             str(a.stripped() if isinstance(a, C) else a)
             for a in args
         )
-    newline = dict_pop_or(kwargs, 'newline', False)
-    if newline:
+    if newline := dict_pop_or(kwargs, 'newline', False):
         msg = '\n{}'.format(msg)
     print(msg, **kwargs)
 

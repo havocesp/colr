@@ -340,8 +340,7 @@ class ChainedBase(object):
                             # Trying to strip a code, and can't find it.
                             break
 
-                stripped = method(partstr, chars)
-                if stripped == partstr:
+                if (stripped := method(partstr, chars)) == partstr:
                     # Nothing was stripped.
                     break
                 parts[i] = stripped

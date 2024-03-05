@@ -395,13 +395,12 @@ def get_code_num(s: str) -> Optional[int]:
         # Fore, back, style, codes.
         numberstr = s.rpartition('[')[-1][:-1]
 
-    num = try_parse_int(
+    if (num := try_parse_int(
         numberstr,
         default=None,
         minimum=0,
         maximum=255
-    )
-    if num is None:
+    )) is None:
         raise InvalidEscapeCode(numberstr)
     return num
 
@@ -599,14 +598,12 @@ def parse_colr_arg(
                 raise InvalidColr(val)
 
             # Try as name (fore/back have the same names)
-            code = codes['fore'].get(val, None)
-            if code:
+            if code := codes['fore'].get(val, None):
                 # Valid basic code from fore, bask, or style.
                 return val
 
             # Not a basic code, try known names.
-            named_data = name_data.get(val, None)
-            if named_data is not None:
+            if (named_data := name_data.get(val, None)) is not None:
                 # A known named color.
                 return val
 
@@ -744,8 +741,7 @@ class Colr(ChainedBase):
             return the color() function. Otherwise, return known
             attributes and raise AttributeError for others.
         """
-        knownmethod = self._attr_to_method(attr)
-        if knownmethod is not None:
+        if (knownmethod := self._attr_to_method(attr)) is not None:
             return knownmethod
 
         try:
@@ -794,8 +790,7 @@ class Colr(ChainedBase):
             intval = int(name)
         except ValueError:
             # Try as an extended name_data name.
-            info = name_data.get(name, None)
-            if info is None:
+            if (info := name_data.get(name, None)) is None:
                 # Not an int value or name_data name.
                 return None
             kws = {kwarg_key: info['code']}
@@ -1021,9 +1016,8 @@ class Colr(ChainedBase):
         # Stop on count, or run forever.
         while (i < count) if count > 0 else True:
             try:
-                stop = yield iterable[pos]
                 # End of generator (user sent the stop signal)
-                if stop:
+                if stop := yield iterable[pos]:
                     break
             except IndexError:
                 # End of iterable, when len(iterable) is < count.
@@ -1062,8 +1056,7 @@ class Colr(ChainedBase):
         stepcnt = 0
         while (pos1 != pos2):
             stepcnt += 1
-            stop = yield tuple(pos1)
-            if stop:
+            if stop := yield tuple(pos1):
                 break
             for x in indexes:
                 if pos1[x] != pos2[x]:
@@ -1299,13 +1292,12 @@ class Colr(ChainedBase):
         # If the last code embedded in the text was a closing code,
         # then it is not added.
         # This can be overriden with `no_closing`.
-        needs_closing = (
+        if needs_closing := (
             text and
             (not no_closing) and
             (not has_end_code) and
             (has_args or embedded_codes)
-        )
-        if needs_closing:
+        ):
             end = closing_code
         else:
             end = ''
@@ -1351,8 +1343,7 @@ class Colr(ChainedBase):
     def get_escape_code(self, codetype, value):
         """ Convert user arg to escape code. """
         valuefmt = str(value).lower()
-        code = codes[codetype].get(valuefmt, None)
-        if code:
+        if code := codes[codetype].get(valuefmt, None):
             # Basic code from fore, back, or style.
             return code
 
@@ -1363,8 +1354,7 @@ class Colr(ChainedBase):
         }
 
         # Not a basic code, try known names.
-        converter = named_funcs.get(codetype, None)
-        if converter is None:
+        if (converter := named_funcs.get(codetype, None)) is None:
             raise ValueError(
                 'Invalid code type. Expecting {}, got: {!r}'.format(
                     ', '.join(named_funcs),
@@ -1376,8 +1366,7 @@ class Colr(ChainedBase):
             value = int(hex2term(value, allow_short=True))
             return converter(value, extended=True)
 
-        named_data = name_data.get(valuefmt, None)
-        if named_data is not None:
+        if (named_data := name_data.get(valuefmt, None)) is not None:
             # A known named color.
             try:
                 return converter(named_data['code'], extended=True)
@@ -1437,9 +1426,8 @@ class Colr(ChainedBase):
             # Try explicit offset (passed in with `name`).
             offset = int(name)
         except (TypeError, ValueError):
-            name = name.lower().strip() if name else 'black'
             # Black and white are separate methods.
-            if name == 'black':
+            if (name := name.lower().strip() if name else 'black') == 'black':
                 return self.gradient_black(
                     text=text,
                     fore=fore,

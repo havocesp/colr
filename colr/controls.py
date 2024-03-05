@@ -66,8 +66,7 @@ def ensure_tty(file=sys.stdout):
         returns True.
         TypeError is raised if the method doesn't exist, or returns False.
     """
-    isatty = getattr(file, 'isatty', None)
-    if isatty is None:
+    if (isatty := getattr(file, 'isatty', None)) is None:
         raise TypeError(
             'Cannot detect tty, file has no `isatty` method: {}'.format(
                 getattr(file, 'name', type(file).__name__)

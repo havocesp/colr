@@ -101,8 +101,7 @@ def try_unbuffered_file(file, _alreadyopen={}):
         # The output may be line buffered, which isn't that great for
         # repeatedly drawing and erasing text, or hiding/showing the cursor.
         return file
-    filedesc = _alreadyopen.get(fileno, None)
-    if filedesc is not None:
+    if (filedesc := _alreadyopen.get(fileno, None)) is not None:
         return filedesc
 
     filedesc = fdopen(fileno, 'wb', 0)
@@ -431,8 +430,7 @@ class StaticProgress(WriterProcess):
             # stop() should block, so printing afterwards isn't interrupted.
             sleep(0.001)
         # Retrieve the latest exception, if any.
-        exc = self.exception
-        if exc is not None:
+        if (exc := self.exception) is not None:
             raise exc
 
     def write(self):

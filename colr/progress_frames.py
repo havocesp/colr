@@ -48,8 +48,7 @@ def cls_get_by_name(cls, name):
             except AttributeError:
                 # Is known to happen.
                 continue
-            valname = getattr(val, 'name', None)
-            if valname == name:
+            if (valname := getattr(val, 'name', None)) == name:
                 return val
         else:
             raise ValueError('No {} with that name: {}'.format(
@@ -85,8 +84,7 @@ def cls_register(cls, frameset, new_class, init_args, name=None):
                         this argument is required. It must not be empty
                         when given.
     """
-    name = name or getattr(frameset, 'name', None)
-    if name is None:
+    if (name := name or getattr(frameset, 'name', None)) is None:
         raise ValueError(
             '`name` is needed when the `frameset` has no name attribute.'
         )
@@ -261,8 +259,7 @@ class FrameSetBase(object):
                             256 color approximate matches.
         """
         # TODO: Better, smoother gradients.
-        offset = C.gradient_names.get(name, None)
-        if offset is None:
+        if (offset := C.gradient_names.get(name, None)) is None:
             offset = C.gradient_names['blue']
         colrs = []
         for i, char in enumerate(self):
