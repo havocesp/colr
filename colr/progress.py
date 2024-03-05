@@ -86,7 +86,7 @@ from .progress_frames import (  # noqa
 )
 
 
-def try_unbuffered_file(file, _alreadyopen={}):
+def try_unbuffered_file(file, _alreadyopen=None):
     """ Try re-opening a file in an unbuffered mode and return it.
         If that fails, just return the original file.
         This function remembers the file descriptors it opens, so it
@@ -94,6 +94,7 @@ def try_unbuffered_file(file, _alreadyopen={}):
 
         This is meant for files like sys.stdout or sys.stderr.
     """
+    _alreadyopen = {} if _alreadyopen is None else _alreadyopen
     try:
         fileno = file.fileno()
     except (AttributeError, UnsupportedOperation):
