@@ -14,7 +14,6 @@ import os
 import sys
 import traceback
 from contextlib import suppress
-from random import randint
 
 from .base import (
     __version__,
@@ -36,6 +35,7 @@ from .colr import (
 )
 
 from .trans import ColorCode
+import secrets
 
 try:
     from .colr_docopt import docopt
@@ -270,7 +270,7 @@ def get_colr(txt, argd):
             back=back,
             style=style,
             freq=try_float(argd['--frequency'], 0.1, minimum=0),
-            offset=try_int(argd['--offset'], randint(0, 255), minimum=0),
+            offset=try_int(argd['--offset'], secrets.SystemRandom().randint(0, 255), minimum=0),
             spread=try_float(argd['--spread'], 3.0, minimum=0),
             rgb_mode=argd['--truecolor'],
         )
