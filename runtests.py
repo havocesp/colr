@@ -19,6 +19,7 @@ from colr import (
     docopt,
     Colr as C,
 )
+from security import safe_command
 
 
 try:
@@ -73,7 +74,7 @@ def main(argd):
     cmd.extend(green_args)
     print_header(cmd)
 
-    return subprocess.run(cmd).returncode
+    return safe_command.run(subprocess.run, cmd).returncode
 
 
 def get_green_exe():
