@@ -21,6 +21,7 @@ from colr import (
     docopt,
     Colr as C,
 )
+from security import safe_command
 
 colr_auto_disable()
 
@@ -89,7 +90,7 @@ def main(argd):
     cmd.extend(green_args)
     print_header(cmd)
 
-    exitcode = subprocess.run(cmd).returncode
+    exitcode = safe_command.run(subprocess.run, cmd).returncode
     if exitcode:
         return exitcode
     # Success.
@@ -395,7 +396,7 @@ def run_coverage(quiet=False):
         '--title',
         'Coverage for Colr v. {}'.format(colr_version),
     ]
-    exitcode = subprocess.run(covcmd).returncode
+    exitcode = safe_command.run(subprocess.run, covcmd).returncode
     if exitcode:
         return exitcode
     if quiet:
@@ -500,7 +501,7 @@ def view_coverage_browser():
             C(' '.join(cmd[1:]), 'blue'),
         ),
     ))
-    subprocess.Popen(cmd, stderr=subprocess.DEVNULL)
+    safe_command.run(subprocess.Popen, cmd, stderr=subprocess.DEVNULL)
     return 0
 
 
